@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Edit User</title>
+  </head>
+  <body>
+    <!-- Header -->
+    <h4 style="display:inline"><%= @user.name %></h4> |
+    <form action="/logout" method="post" style="display:inline">
+      <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+      <input type="hidden" name="_method" value="delete">
+      <button type="submit">Log Out</button>
+    </form>
+
+    <!-- Form to Update -->
+    <h3>Update</h3>
+    <form action="/update/<%= @user.id %>" method="post">
+        <input type="hidden" name="_method" value="patch">
+        <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+
+        <p style="color:red"><%= flash[:name_error] %></p>
+        <label><u>Name:</u></label><input type="text" name="name" value="<%= @user.name %>"><br>
+
+        <p style="color:red"><%= flash[:email_error] %></p>
+        <label><u>Email:</u></label><input type="text" name="email" value="<%= @user.email %>"><br>
+
+        <p style="color:red"><%= flash[:description_error] %></p>
+        <label><u>Description:</u></label><br>
+        <textarea name="description"><%= @user.description %></textarea><br><br>
+
+        <input type="submit" value="Update">
+    </form>
+    <br>
+
+    <!-- Delete account -->
+    <form action="/destroy/<%= @user.id %>" method="post">
+        <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+        <input type="hidden" name="_method" value="delete">
+        <button type="submit">Delete Account</button>
+    </form>
+    <br><br>
+
+    <!-- Link back to profile -->
+    <a href="/profile"><button>Back to Profile</button></a>
+  </body>
+</html>

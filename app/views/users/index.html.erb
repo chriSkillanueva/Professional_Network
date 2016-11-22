@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Login/Registration</title>
+  </head>
+  <body>
+    <p style="color:red"><%= flash[:not_logged_in] %></p>
+    <!-- Register -->
+    <hr>
+    <h1>Sign Up</h1>
+    <form action="/register" method="post">
+      <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden"><br>
+
+        <p style="color:red"><%= flash[:name_error] %></p>
+        <label><u>Name:</u></label><input type="text" name="name" placeholder="Name"><br>
+
+        <p style="color:red"><%= flash[:email_error] %></p>
+        <label><u>Email:</u></label><input type="text" name="email" placeholder="Email"><br>
+
+        <p style="color:red"><%= flash[:password_error] %></p>
+        <label><u>Password:</u></label><input type="password" name="password" placeholder="Password"><br>
+        <p>*Password should be at least 8 characters</p>
+
+        <p style="color:red"><%= flash[:confirm_error] %></p>
+        <label><u>Password Confirmation:</u></label><input type="password" name="confirm" placeholder="Confirm Password"><br>
+
+        <p style="color:red"><%= flash[:description_error] %></p>
+        <label><u>Description:</u></label><br>
+        <textarea name="description">Your Profile Description</textarea><br>
+
+        <input type="submit" value="Register">
+    </form>
+    <!-- Login -->
+    <br><hr>
+    <h1>Log In</h1>
+    <p style="color:red"><%= flash[:login_error] %></p>
+    <p style="color:red"><%= flash[:error] %></p>
+    <form action='/login' method='post'>
+		  <input name='authenticity_token' value="<%= form_authenticity_token %>" type='hidden'>
+			<label><u>Email:</u></label><input name="email" type="text" placeholder="Email"><br><br>
+      <label><u>Password:</u></label><input name="password" type="password" placeholder="Password"><br><br>
+			<input type="submit" value="Log In">
+	  </form>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title><%= @friend.name %></title>
+  </head>
+  <body>
+    <!-- Header -->
+    <h4 style="display:inline"><%= @user.name %></h4> |
+    <a style="display:inline" href="/profile"><button>Profile</button></a>
+    <form action="/logout" method="post" style="display:inline">
+      <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+      <input type="hidden" name="_method" value="delete">
+      <button type="submit">Log Out</button>
+    </form>
+    
+    <!-- Friend's Info -->
+    <hr>
+    <h4><%= @friend.name %> </h4>
+    <h4>Description: <%= @friend.description %> </h4>
+
+    <!-- Delete friendship if present -->
+    <% if @user.friends.include? @friend %>
+    <hr>
+    <form action="/disconnect" method="post">
+        <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+        <input type="hidden" name="_method" value="delete">
+        <input type="hidden" name="user_id" value="<%= @user.id %>">
+        <input type="hidden" name="friend_id" value="<%= @friend.id %>">
+        <button type="submit">Remove From Your Network</button>
+    </form>
+    <% end %>
+  </body>
+</html>

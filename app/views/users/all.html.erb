@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>All Users</title>
+  </head>
+  <body>
+    <!-- Header -->
+    <h4 style="display:inline"><%= @user.name %></h4> |
+    <a style="display:inline" href="/profile"><button>Profile</button></a>
+    <form action="/logout" method="post" style="display:inline">
+      <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+      <input type="hidden" name="_method" value="delete">
+      <button type="submit">Log Out</button>
+    </form>
+
+    <!-- Displays users who are not friends with current user and users with no pending invitation with current user -->
+    <% if @connect_with.length > 0 %>
+    <hr>
+    <h3>Users you may want to connect with:</h3>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Action</th>
+      </tr>
+      <% @connect_with.each do |user| %>
+      <tr>
+        <td><a href="users/<%= user.id %>"><%= user.name %></a></td>
+        <td>
+          <form action="/invite" method="post">
+            <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+            <input type="hidden" name="user_id" value="<%= @user.id %>">
+            <input type="hidden" name="invite_id" value="<%= user.id %>">
+            <input type="submit" value="Connect">
+          </form>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+    <% end %>
+
+    <!-- Displays users who sent an invitation to current user -->
+    <% if @accept.length > 0 %>
+    <hr>
+    <h3>Network Requests:</h3>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Action</th>
+      </tr>
+      <% @accept.each do |invite| %>
+      <tr>
+        <td><a href="users/<%= invite.user.id %>"><%= invite.user.name %></a></td>
+        <td>
+          <form action="/network" method="post">
+            <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+            <input type="hidden" name="user_id" value="<%= @user.id %>">
+            <input type="hidden" name="friend_id" value="<%= invite.user.id %>">
+            <input type="submit" value="Accept Invite">
+          </form>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+    <% end %>
+
+    <!-- Displays users who current user sent an invitation to -->
+    <% if @sent.length > 0 %>
+    <hr>
+    <h3>Your Pending Requests:</h3>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Action</th>
+      </tr>
+      <% @sent.each do |x| %>
+      <tr>
+        <td><a href="users/<%= x.invite.id %>"><%= x.invite.name %></a></td>
+        <td>
+          <form action="/ignore" method="post">
+              <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+              <input type="hidden" name="_method" value="delete">
+              <input type="hidden" name="user_id" value="<%= @user.id %>">
+              <input type="hidden" name="invite_id" value="<%= x.invite.id %>">
+              <button type="submit">Cancel</button>
+          </form>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+    <% end %>
+  </body>
+</html>

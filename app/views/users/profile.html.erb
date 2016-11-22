@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Profile</title>
+  </head>
+  <body>
+    <!-- Header -->
+    <h4 style="display:inline">Hi, <%= @user.name %></h4> |
+    <a style="display:inline" href="/edit/<%= @user.id %>"><button>Edit Profile</button></a>
+    <form action="/logout" method="post" style="display:inline">
+      <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+      <input type="hidden" name="_method" value="delete">
+      <button type="submit">Log Out</button>
+    </form>
+    <hr><br>
+
+    <!-- Error Box -->
+    <% if flash[:error] %>
+    <p style="color:red"><%= flash[:error] %> ! </p><br>
+    <hr><br>
+    <% end %>
+
+    <!-- Link to Connect with Other Users -->
+    <a href="/users"><button>Connect with Other Users</button></a><br>
+    <br><hr>
+
+    <!-- Display Profile Description -->
+    <h3>Here is your profile description:</h3>
+    <p><%= @user.description %></p>
+    <br>
+
+    <!-- Display Friends -->
+    <% if @user.friends.length > 0 %>
+    <hr>
+    <h3>Your Professional Network:</h3>
+    <% @user.friends.each do |friend| %>
+      <p> <a href="users/<%= friend.id %>"><%= friend.name %></a></p>
+    <% end %>
+    <% end %>
+
+    <!-- Display User's Invitations -->
+    <% if @invites.length > 0 %>
+    <hr>
+    <h3>Invitations:</h3>
+    <h4>The following people asked you to join their network</h4>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Actions</th>
+      </tr>
+      <% @invites.each do |invite| %>
+      <tr>
+        <td><a href="users/<%= invite.user.id %>"><%= invite.user.name %></a></td>
+        <td>
+          <!-- Accept Invitation  -->
+          <form action="/network" method="post" style="display:inline-block">
+            <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+            <input type="hidden" name="user_id" value="<%= @user.id %>">
+            <input type="hidden" name="friend_id" value="<%= invite.user.id %>">
+            <input type="submit" value="Accept Invite">
+          </form>
+          <!-- Decline Invitation  -->
+          <form action="/ignore" method="post" style="display:inline-block">
+              <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+              <input type="hidden" name="_method" value="delete">
+              <input type="hidden" name="user_id" value="<%= invite.user.id %>">
+              <input type="hidden" name="invite_id" value="<%= @user.id %>">
+              <input type="submit" value="Ignore">
+          </form>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+    <% end %>
+  </body>
+</html>
